@@ -4,34 +4,34 @@ def busqueda(cadena):
     resultado = [] #ALMACENA LOS NOMBRES Y NUMEROS ENCONTRADOS
     cadena = cadena.lower() #ALMACENA EL INPUT DEL USUARIO Y LO NORMALIZA CONVIRTIENDO TODOS SUS VALORES A MINUSCULAS
     indexador = 0 #ALMACENA EL INDICE DEL ELEMENTO QUE SE ESTA ITERANDO
+    indice = []
     
     for diccionario in lista_telefonos: #ITERA CADA VALOR DE lista_telefonos Y ALMACENA EN LA VARIABLE diccionario EL VALOR QUE SE ESTA ITERANDO
         nombre = diccionario['nombre'].lower() #CREA UNA VARIABLE nombre DONDE ALMACENA EL VALOR DE LA LLAVE 'nombre' CONTENIDA EN EL VALOR QUE SE ESTA ITERANDO ACTUALMENTE (diccionario)
         telefono = str(diccionario['telefono']) #LO MISMO QUE LA LINEA ANTERIOR PERO CON LA LLAVE 'telefono' , SE DEFINE COMO str PARA PODER COMPARARLA CON LA cadena QUE INGRESA EL USUARIO Y ASI FILTRAR LOS TELEFONOS TAMBIEN
     
         if cadena in nombre or cadena in telefono: #CONDICIONAL, ESTABLECE QUE SI EL VALOR DE cadena SE ENCUNETRA DENTRO DE LA VARIABLE nombre O SI EL VALOR DE cadena SE ENCUENTRA EN telefono SE CUMPLE LA CONDICION
-            resultado.append((nombre, telefono)) #AGREGA A LA LISTA DE RESULTADOS EL NOMBRE Y EL TELEFONO FILTRADO
-            indice = indexador #ASIGNA A LA VARIABLE indice EL VALOR ACTUAL DE INDEXADOR (SI SIMPLEMENTE RETORNAMOS INDEXADOR, NOS DARA EL LARGO TOTAL DE LA LISTA EN VEZ DEL VALOR EN EL CUAL NOS ENCONTRAMOS)
+            resultado.append((nombre , telefono)) #AGREGA A LA LISTA DE RESULTADOS EL NOMBRE Y EL TELEFONO FILTRADO
+            indice.append(indexador) #AGREGA EL VALOR ACTUAL DEL INDEXADOR A LA LISTA PARA IDENTIFICAR A CADA BUSQUEDA
         indexador = indexador + 1 #AUMENTA EL INDEXADOR EN 1, PARA QUE COINCIDA CON EL SIGUIIENTE ELEMENTO DE LA LISTA
     
     return resultado , indice
 
-cadena = input("Ingrese su búsqueda (SI DESEA AGREGAR UN CORREO ASEGURESE DE ESCRIBIR EL NOMBRE EXACTO):\n") #INPUT, PERMITE AL USUARIO INGRESAR LA CADENA DE BUSQUEDA
+cadena = input("Ingrese su búsqueda:\n") #INPUT, PERMITE AL USUARIO INGRESAR LA CADENA DE BUSQUEDA
 resultado , indice = busqueda(cadena) #TUPLA, ASIGNA EN LAS VARIABLES resultado E indice LOS RESPECTIVOS VALORES QUE RETORNA LA FUNCION busqueda(cadena)
+contador = 0 #CONTADOR PARA ASIGNAR UN IDENTIFICADOR A CADA ELEMENTO DE LA LISTA resultado
 
-if len(resultado) > 0: #SI EL RESULTADO DE LA BUSQUEDA ARROJA MAS DE 0 RESULTADOS, LOS IMPRIME
-    print(resultado)
+for elemento in resultado: #ITERO SOBRE LOS ELEMENTOS DE resultado
+    print(f"{contador}: {elemento}") #IMPRIMO EL CONTADOR Y EL elemento QUE SE ESTA ITERANDO EN CADA CICLO, DE ESTA MANERA GENERO UNA LISTA ORDENADA CON LOS VALORES DE LA LISTA resultado
+    contador = contador + 1 #AUMENTO EN 1 EL VALOR DEL CONTADOR PARA QUE SE IMPRIMAN EN ORDEN AUTOMATICAMENTE PARTIENDO DESDE EL 0 PARA PODER IDENTIFICARLOS POR EL indice
 
-if len(resultado) == 1: #SI ARROJA SOLO UN RESULTADO, PERMITE AGREGAR UN CORREO
-    decide = int(input("¿Desea agregar un correo?\n1 = SI\n2 = NO\n")) #INPUT, PERMITE AL USUARIO DECIDIR SI AGREGAR O NO UN CORREO
+decide = int(input("Desea agregar un e-mail?\n1:SI\n2:NO\n"))
 
-    if decide == 1: #USUARIO ELIGE SI
-        correo = input("Ingrese el correo:\n") #ALMACENA EL CORREO QUE INGRESA EL USUARIO
-        lista_telefonos[indice]['e-mail'] = correo #MODIFICA LA LISTA, DE MANERA QUE EN EL INDICE QUE NOS RETORNO LA BUSQUEDA (QUE CORRESPONDE AL INDICE DEL NUMERO SELECCIONADO) NOS AGREGA LA LLAVE e-mail Y LE ASIGNA COMO VALOR EL CORREO INGRESADO
-        print(lista_telefonos[indice]) #IMPRIME EL ELEMENTO DEL DICCIONARIO YA MODIFICADO CON EL CORREO AGREGADO
-    
-    if decide == 2:#USUARIO ELIGE NO
-        print("Hasta pronto") #EL PROGRAMA TERMINA
+if decide == 1:
+    indiceCorreo = int(input("Seleccione el contacto (0/1/2/3...etc)\n")) #PIDE AL USUARIO ELEGIR EL CONTACTO AL QUE QUIERE AGREGAR EL CORREO
+    correo = input("Ingrese el correo correspondiente:\n") #PIDE AL USUARIO INGRESAR EL CORREO
+    lista_telefonos[indice[indiceCorreo]]['e-mail'] = correo #AGREGA EL CORREO AL CONTACTO CORRESPONDIENTE USANDO LA VARIABLE indice Y USANDO LA ELECCION DEL USUARIO PARA ENCONTRAR EL CONTACTO
+    print(lista_telefonos[indice[indiceCorreo]]) #IMPRIME EL CONTACTO CON EL CORREO MODIFICADO
 
-if len(resultado) == 0: #SI ARROJA 0 RESULTADOS, IMPRIME MENSAJE DE ERROR
-    print("No se encontraron resultados.")
+if decide == 2:
+    print("Hasta pronto.")
